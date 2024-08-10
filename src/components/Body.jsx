@@ -1,69 +1,64 @@
 import RestaurentraCards from "./RestaurentraCards";
 
 import resList from "../../utils/mockData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Shimmer from "./Shimmer";
 
 const Body = () => {
-  const [ListOfRestaurent, setListOfRestaurent] = useState(resList);
-  //   const ListOfRestaurent2 = [
-  //     {
-  //       info: {
-  //         id: "582150",
-  //         name: "Chinese Wok",
-  //         cloudinaryImageId: "e0839ff574213e6f35b3899ebf1fc597",
+  const [ListOfRestaurent, setListOfRestaurent] = useState([]);
+  const [filterRestaurent, SetFilterRestaurent] = useState([]);
+  const [inputvalue, SetInputValue] = useState("");
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  //         cuisines: ["Chinese", "Asian", "Tibetan", "Desserts"],
-  //         avgRating: 4.3,
-  //         sla: {
-  //           deliveryTime: 27,
-  //         },
+  const fetchData = async () => {
+    const data = await fetch(
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=11.01420&lng=76.99410&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+    );
 
-  //         aggregatedDiscountInfoV3: {
-  //           header: "ITEMS",
-  //           subHeader: "AT ₹149",
-  //         },
-  //       },
-  //     },
-  //     {
-  //       info: {
-  //         id: "582151",
-  //         name: "Dominos",
-  //         cloudinaryImageId: "e0839ff574213e6f35b3899ebf1fc597",
+    const json = await data.json();
 
-  //         cuisines: ["Chinese", "Asian", "Tibetan", "Desserts"],
-  //         avgRating: 3,
-  //         sla: {
-  //           deliveryTime: 27,
-  //         },
+    console.log(json);
 
-  //         aggregatedDiscountInfoV3: {
-  //           header: "ITEMS",
-  //           subHeader: "AT ₹149",
-  //         },
-  //       },
-  //     },
-  //     {
-  //       info: {
-  //         id: "582152",
-  //         name: "Kfc",
-  //         cloudinaryImageId: "e0839ff574213e6f35b3899ebf1fc597",
+    setListOfRestaurent(
+      json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
+        ?.restaurants,
+      "data"
+    );
+    SetFilterRestaurent(
+      json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
+        ?.restaurants,
+      "data"
+    );
+  };
 
-  //         cuisines: ["Chinese", "Asian", "Tibetan", "Desserts"],
-  //         avgRating: 4.5,
-  //         sla: {
-  //           deliveryTime: 27,
-  //         },
-
-  //         aggregatedDiscountInfoV3: {
-  //           header: "ITEMS",
-  //           subHeader: "AT ₹149",
-  //         },
-  //       },
-  //     },
-  //   ];
-  return (
+  return ListOfRestaurent.length === 0 ? (
+    <Shimmer />
+  ) : (
     <div className="body">
       <div className="filter">
+        <div>
+          <input
+            type="text"
+            value={inputvalue}
+            onChange={(e) => {
+              SetInputValue(e.target.value);
+            }}
+          />
+          <button
+            onClick={() => {
+              const SearchFilter = ListOfRestaurent.filter((res) => {
+                return res.info.name
+                  .toLowerCase()
+                  .includes(inputvalue.toLowerCase());
+              });
+              SetFilterRestaurent(SearchFilter);
+            }}
+          >
+            search
+          </button>
+        </div>
         <button
           className="filter-btn"
           onClick={() => {
@@ -78,7 +73,7 @@ const Body = () => {
         </button>
       </div>
       <div className="res-container">
-        {ListOfRestaurent.map((restaurent) => (
+        {filterRestaurent.map((restaurent) => (
           <RestaurentraCards key={restaurent.info.id} resData={restaurent} />
         ))}
       </div>

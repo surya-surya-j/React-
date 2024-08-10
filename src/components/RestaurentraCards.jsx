@@ -4,7 +4,6 @@ const RestaurentraCards = (props) => {
   const { resData } = props;
   const { name, cuisines, avgRating } = resData?.info;
   const { deliveryTime } = resData?.info.sla;
-  const { subHeader } = resData?.info.aggregatedDiscountInfoV3;
 
   return (
     <div className="res-card" style={{ backgroundColor: "#f0f0f0" }}>
@@ -17,7 +16,6 @@ const RestaurentraCards = (props) => {
       <h4>{cuisines.join(", ")}</h4>
       <h4>{avgRating}</h4>
       <h4>{deliveryTime}/minutes</h4>
-      <h4>{subHeader} </h4>
     </div>
   );
 };
