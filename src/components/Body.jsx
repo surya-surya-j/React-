@@ -1,4 +1,4 @@
-import RestaurentraCards from "./RestaurentraCards";
+import RestaurentraCards, { withPromotedLabel } from "./RestaurentraCards";
 
 import resList from "../../utils/mockData";
 import { useEffect, useState } from "react";
@@ -10,6 +10,9 @@ const Body = () => {
   const [ListOfRestaurent, setListOfRestaurent] = useState([]);
   const [filterRestaurent, SetFilterRestaurent] = useState([]);
   const [inputvalue, SetInputValue] = useState("");
+
+  const RestaurentCardPromoted = withPromotedLabel(RestaurentraCards);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -21,7 +24,7 @@ const Body = () => {
 
     const json = await data.json();
 
-    console.log(json);
+   
 
     setListOfRestaurent(
       json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
@@ -46,9 +49,10 @@ const Body = () => {
     <Shimmer />
   ) : (
     <div className="body">
-      <div className="filter">
-        <div>
+      <div className="flex">
+        <div className="m-4 p-4">
           <input
+            className="border border-solid border-black"
             type="text"
             value={inputvalue}
             onChange={(e) => {
@@ -56,6 +60,7 @@ const Body = () => {
             }}
           />
           <button
+            className="px-4  py-2  m-4 bg-green-100 rounded-lg "
             onClick={() => {
               const SearchFilter = ListOfRestaurent.filter((res) => {
                 return res.info.name
@@ -63,31 +68,38 @@ const Body = () => {
                   .includes(inputvalue.toLowerCase());
               });
               SetFilterRestaurent(SearchFilter);
+              console.log(filterRestaurent, "ggg");
             }}
           >
             search
           </button>
         </div>
-        <button
-          className="filter-btn"
-          onClick={() => {
-            FilterData = ListOfRestaurent.filter(
-              (res) => res.info.avgRating > 4.3
-            );
-            console.log(FilterData);
-            setListOfRestaurent(FilterData);
-          }}
-        >
-          Top Rated Restaurents
-        </button>
+        <div className="m-4 p-4 flex items-center">
+          <button
+            className="px-4 py-2 bg-gray-100 rounded"
+            onClick={() => {
+              FilterData = ListOfRestaurent.filter(
+                (res) => res.info.avgRating > 4.5
+              );
+              console.log(FilterData, "filter");
+              setListOfRestaurent(FilterData);
+            }}
+          >
+            Top Rated Restaurents
+          </button>
+        </div>
       </div>
-      <div className="res-container">
+      <div className="flex flex-wrap">
         {filterRestaurent.map((restaurent) => (
           <Link
             to={"/restaurent/" + restaurent.info.id}
             key={restaurent.info.id}
           >
-            <RestaurentraCards resData={restaurent} />
+            {restaurent.info.isOpen ? (
+              <RestaurentCardPromoted resData={restaurent} />
+            ) : (
+              <RestaurentraCards resData={restaurent} />
+            )}
           </Link>
         ))}
       </div>

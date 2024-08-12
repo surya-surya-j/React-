@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./components/Header";
 import Body from "./components/Body";
@@ -28,6 +28,15 @@ import Restramenupage from "./components/Restramenupage";
 const Groccery = lazy(() => import("./components/Groccery"));
 
 const AppLayout = () => {
+  const [userName, setUsername] = useState("");
+
+  useEffect(() => {
+    const data = {
+      name: "surya",
+    };
+    setUsername(data.name)
+  }, []);
+
   return (
     <div className="app">
       <Header />
