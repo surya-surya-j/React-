@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
-import useRestaurentMenu from "../../utils/useRestaurentMenu";
+import useRestaurentMenu from "../utils/useRestaurentMenu";
 import RestaurentCategory from "./RestaurentCategory";
 
 function Restramenupage() {

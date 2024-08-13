@@ -1,15 +1,17 @@
 import RestaurentraCards, { withPromotedLabel } from "./RestaurentraCards";
 
-import resList from "../../utils/mockData";
-import { useEffect, useState } from "react";
+import resList from "../utils/mockData";
+import { useEffect, useState, useContext } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
-import useOnlineStatus from "../../utils/useOnlineStatus";
+import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 const Body = () => {
   const [ListOfRestaurent, setListOfRestaurent] = useState([]);
   const [filterRestaurent, SetFilterRestaurent] = useState([]);
   const [inputvalue, SetInputValue] = useState("");
+  const { loggedInUser, setUsername } = useContext(UserContext);
 
   const RestaurentCardPromoted = withPromotedLabel(RestaurentraCards);
 
@@ -23,8 +25,6 @@ const Body = () => {
     );
 
     const json = await data.json();
-
-   
 
     setListOfRestaurent(
       json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle
@@ -78,7 +78,7 @@ const Body = () => {
           <button
             className="px-4 py-2 bg-gray-100 rounded"
             onClick={() => {
-              FilterData = ListOfRestaurent.filter(
+              const FilterData = ListOfRestaurent.filter(
                 (res) => res.info.avgRating > 4.5
               );
               console.log(FilterData, "filter");
@@ -87,6 +87,15 @@ const Body = () => {
           >
             Top Rated Restaurents
           </button>
+          <div className="m-2 p-2 ">
+            <label>UserName</label>
+            <input
+              type="text"
+              className="border border-black m-2 rounded"
+              value={loggedInUser}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-wrap">

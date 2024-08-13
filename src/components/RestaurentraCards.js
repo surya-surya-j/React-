@@ -1,4 +1,4 @@
-import { CDN_URL } from "../../utils/constants";
+import { CDN_URL } from "../utils/constants";
 
 const RestaurentraCards = (props) => {
   const { resData } = props;
@@ -18,22 +18,21 @@ const RestaurentraCards = (props) => {
       <h4>{deliveryTime}/minutes</h4>
     </div>
   );
-
-  
-  
 };
 // Higher Order Component
 // input -restaurentcard => returns Restacard promoted
 
- export  const withPromotedLabel =(RestaurentraCards)=>{
-        return (props)=>{
-          return (
-            <div>
-              <label className="absolute bg-black text-white m-2 p-1 rounded-lg">isOpen</label>
-              <RestaurentraCards {...props}/>
-            </div>
-          );
-        }
-  }
+export const withPromotedLabel = (RestaurentraCards) => {
+  return (props) => {
+    return (
+      <div>
+        <label className="absolute bg-black text-white m-2 p-1 rounded-lg">
+          isOpen
+        </label>
+        <RestaurentraCards {...props} />
+      </div>
+    );
+  };
+};
 
 export default RestaurentraCards;

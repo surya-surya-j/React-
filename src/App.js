@@ -7,6 +7,11 @@ import About from "./components/About";
 import Contact from "./components/Contact";
 import Error from "./components/Error";
 import Restramenupage from "./components/Restramenupage";
+import UserContext from "./utils/UserContext";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
+
+import Card from "./components/Card";
 // import Groccery from "./components/Groccery";
 
 /**
@@ -34,14 +39,18 @@ const AppLayout = () => {
     const data = {
       name: "surya",
     };
-    setUsername(data.name)
+    setUsername(data.name);
   }, []);
 
   return (
-    <div className="app">
-      <Header />
-      <Outlet />
-    </div>
+    <Provider store={appStore}>
+      <UserContext.Provider value={{ loggedInUser: userName, setUsername }}>
+        <div className="app">
+          <Header />
+          <Outlet />
+        </div>
+      </UserContext.Provider>
+    </Provider>
   );
 };
 
@@ -55,6 +64,10 @@ const appRouter = createBrowserRouter([
         element: <Body />,
       },
       {
+        path: "/cart",
+        element: <Card />,
+      },
+      {
         path: "/about",
         element: <About />,
       },
@@ -66,6 +79,7 @@ const appRouter = createBrowserRouter([
         path: "/restaurent/:resId",
         element: <Restramenupage />,
       },
+
       {
         path: "/groccery",
         element: (
